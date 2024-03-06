@@ -1,10 +1,10 @@
-use std::path::{ Path, PathBuf };
+use std::path::{Path, PathBuf};
 
-use piston_window::*;
-use opengl_graphics::GlGraphics;
-use opengl_graphics::Texture as GlTexture;
 use board::Board;
 use number_renderer::NumberRenderer;
+use opengl_graphics::GlGraphics;
+use opengl_graphics::Texture as GlTexture;
+use piston_window::*;
 use settings::Settings;
 
 pub struct App<'a> {
@@ -18,7 +18,9 @@ pub struct App<'a> {
     window_background_color: [f32; 4],
 }
 
-fn rgb2rgba(c: [f32; 3]) -> [f32; 4] { [c[0], c[1], c[2], 1.0] }
+fn rgb2rgba(c: [f32; 3]) -> [f32; 4] {
+    [c[0], c[1], c[2], 1.0]
+}
 
 impl<'a> App<'a> {
     pub fn new(settings: &'a Settings) -> App<'a> {
@@ -34,18 +36,21 @@ impl<'a> App<'a> {
         }
     }
 
-    fn render_ui(&self, c: &Context, gl: &mut GlGraphics) {		
-        Image::new_color(rgb2rgba(self.settings.text_dark_color))
-            .draw(self.logo.iter().next().unwrap(),
-                  &DrawState::default(),
-                  c.trans(self.settings.board_padding,self.settings.board_padding).transform,
-                  gl);
+    fn render_ui(&self, c: &Context, gl: &mut GlGraphics) {
+        Image::new_color(rgb2rgba(self.settings.text_dark_color)).draw(
+            self.logo.iter().next().unwrap(),
+            &DrawState::default(),
+            c.trans(self.settings.board_padding, self.settings.board_padding)
+                .transform,
+            gl,
+        );
 
-        Rectangle::new(rgb2rgba(self.settings.label_color))
-            .draw(self.settings.best_rect,
-                  &DrawState::default(),
-                  c.transform,
-                  gl);
+        Rectangle::new(rgb2rgba(self.settings.label_color)).draw(
+            self.settings.best_rect,
+            &DrawState::default(),
+            c.transform,
+            gl,
+        );
 
         let comment1_offset_y = self.settings.comment1_offset_y;
         let comment1 = self.comment1.as_ref().unwrap();
@@ -55,17 +60,20 @@ impl<'a> App<'a> {
         App::render_comment(self.settings, comment2, comment2_offset_y, c, gl);
     }
 
-    fn render_comment(settings: &Settings, comment: &GlTexture, y: f64, c: &Context, gl: &mut GlGraphics) {
+    fn render_comment(
+        settings: &Settings,
+        comment: &GlTexture,
+        y: f64,
+        c: &Context,
+        gl: &mut GlGraphics,
+    ) {
         let (width, height) = comment.get_size();
         let w = settings.window_size[0] as f64 - 2.0 * settings.board_padding;
         let h = height as f64 * w / width as f64;
 
         Image::new_color(rgb2rgba(settings.text_dark_color))
             .rect([settings.board_padding, y, w, h])
-            .draw( comment,
-                   &DrawState::default(),
-                   c.transform,
-                   gl);
+            .draw(comment, &DrawState::default(), c.transform, gl);
     }
 
     pub fn load(&mut self) {
@@ -98,7 +106,6 @@ impl<'a> App<'a> {
             self.render_ui(c, gl);
             self.board.render(nr.iter().next().unwrap(), c, gl);
         });
-
     }
 
     pub fn update(&mut self, args: &UpdateArgs) {
@@ -106,8 +113,8 @@ impl<'a> App<'a> {
     }
 
     pub fn key_press(&mut self, args: &Button) {
-		use piston_window::Button::Keyboard;
-		
+        use piston_window::Button::Keyboard;
+
         if *args == Keyboard(Key::Left) {
             self.board.merge_from_right_to_left();
         }

@@ -1,8 +1,8 @@
 #[macro_use]
 extern crate serde_derive;
-extern crate rand;
-extern crate piston_window;
 extern crate opengl_graphics;
+extern crate piston_window;
+extern crate rand;
 extern crate sdl2_window;
 
 use piston_window::*;
@@ -15,18 +15,16 @@ mod settings;
 mod tile;
 
 fn main() {
-	use opengl_graphics::GlGraphics;	
+    use opengl_graphics::GlGraphics;
     let settings = settings::Settings::load();
 
-	let (width, height) = (settings.window_size[0], 
-	                       settings.window_size[1]);
+    let (width, height) = (settings.window_size[0], settings.window_size[1]);
 
     // according to piston WindowSettings documentation, OpenGL::V3_2 is the default version
-    let mut window: PistonWindow<Sdl2Window> =
-        WindowSettings::new("Rust-2048", [width, height])
-            .exit_on_esc(true)
-            .build()
-            .unwrap_or_else(|e| { panic!("Failed to build PistonWindow: {}", e) });
+    let mut window: PistonWindow<Sdl2Window> = WindowSettings::new("Rust-2048", [width, height])
+        .exit_on_esc(true)
+        .build()
+        .unwrap_or_else(|e| panic!("Failed to build PistonWindow: {}", e));
 
     let mut app = app::App::new(&settings);
 
@@ -40,9 +38,9 @@ fn main() {
         }
 
         if let Some(ref args) = e.update_args() {
-           // TODO: only update if necessary
-           // println!("update");
-           app.update(args);
+            // TODO: only update if necessary
+            // println!("update");
+            app.update(args);
         }
 
         if let Some(ref args) = e.press_args() {

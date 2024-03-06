@@ -1,7 +1,7 @@
-use std::path::Path;
-use piston_window::*;
 use opengl_graphics::GlGraphics;
 use opengl_graphics::Texture as GlTexture;
+use piston_window::*;
+use std::path::Path;
 
 static DIGITS_WIDTH: f64 = 20.0;
 static DIGITS_HEIGHT: f64 = 26.0;
@@ -14,14 +14,23 @@ impl NumberRenderer {
     pub fn new() -> NumberRenderer {
         NumberRenderer {
             image: GlTexture::from_path(
-                    Path::new("bin/assets/digits.png"),
-                    &TextureSettings::new(),
-            ).unwrap(),
+                Path::new("bin/assets/digits.png"),
+                &TextureSettings::new(),
+            )
+            .unwrap(),
         }
     }
 
-    pub fn render(&self, number: u32, center_x: f64, center_y: f64, max_width: f64,
-                  color: [f32; 3], c: &Context, gl: &mut GlGraphics) {
+    pub fn render(
+        &self,
+        number: u32,
+        center_x: f64,
+        center_y: f64,
+        max_width: f64,
+        color: [f32; 3],
+        c: &Context,
+        gl: &mut GlGraphics,
+    ) {
         let digits = number_to_digits(number);
         let total_width = DIGITS_WIDTH * digits.len() as f64;
         let total_width = if total_width > max_width {
@@ -36,12 +45,14 @@ impl NumberRenderer {
 
         for digit in digits.iter() {
             Image::new_color([color[0], color[1], color[2], 1.0])
-                .src_rect([(*digit * DIGITS_WIDTH as u32) as f64, 0 as f64, DIGITS_WIDTH as f64, DIGITS_HEIGHT as f64])
+                .src_rect([
+                    (*digit * DIGITS_WIDTH as u32) as f64,
+                    0 as f64,
+                    DIGITS_WIDTH as f64,
+                    DIGITS_HEIGHT as f64,
+                ])
                 .rect([x, y, width, height])
-                .draw(&self.image,
-                      &DrawState::default(),
-                      c.transform,
-                      gl);
+                .draw(&self.image, &DrawState::default(), c.transform, gl);
 
             x += width;
         }

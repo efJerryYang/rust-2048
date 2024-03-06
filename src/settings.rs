@@ -50,11 +50,7 @@ impl Settings {
         let mut tiles_colors = Vec::<[f32; 3]>::new();
 
         for color in s.tiles_colors.iter() {
-            tiles_colors.push([
-                color[0] / 255.0,
-                color[1] / 255.0,
-                color[2] / 255.0,
-            ]);
+            tiles_colors.push([color[0] / 255.0, color[1] / 255.0, color[2] / 255.0]);
         }
 
         Settings {
@@ -201,7 +197,7 @@ impl SettingsInJson {
             tile_move_time: 0.1,
             tile_new_time: 0.1,
             tile_combine_time: 0.1,
-            best_rect: vec![284.0, 12.0, 96.0, 48.0,],
+            best_rect: vec![284.0, 12.0, 96.0, 48.0],
             score_rect: vec![176.0, 12.0, 96.0, 48.0],
             label_color: vec![187.0, 173.0, 160.0],
             button_color: vec![142.0, 122.0, 102.0],
@@ -235,7 +231,10 @@ impl SettingsInJson {
 
         match file {
             Err(e) => {
-                println!("Configuration file can't be open ({}). Try to generate a default one.", e);
+                println!(
+                    "Configuration file can't be open ({}). Try to generate a default one.",
+                    e
+                );
                 let default = SettingsInJson::default_settings();
                 default.save();
                 return default;
@@ -250,7 +249,10 @@ impl SettingsInJson {
                 return settings;
             }
             Err(e) => {
-                println!("WARNING: Failed to read settings from file. Try to generate a default one. {}", e);
+                println!(
+                    "WARNING: Failed to read settings from file. Try to generate a default one. {}",
+                    e
+                );
                 let new_settings = SettingsInJson::default_settings();
                 new_settings.save();
                 return new_settings;
